@@ -10,13 +10,13 @@ To learn more about this tool, you should read its companion blog post here:
   <img src="poc.png">
 </p>
 
-## Disclaimer 💣
+## 💣 Disclaimer
 
 I would qualify this tool as an _advanced Proof-of-Concept_. You should think twice before using it on a real engagement. It is safe to use as long as it is __not interrupted__, which cannot be guaranteed in the presence of an EDR for instance.
 
 It modifies important registry keys related to the Windows Update Medic service. At worst, if those registry keys are not restored properly, this service will fail to function properly, but this __will not crash__ the OS.
 
-## Usage 📝
+## 📝 Usage
 
 Prerequisites:
 
@@ -65,16 +65,16 @@ C:\WINDOWS\system32>C:\Temp\PPLmedic.exe dump 520 c:\Temp\csrss.dmp -p
 [...]
 ```
 
-## Tests 📋
+## 📋 Tests
 
 | Windows version | PPL-Windows | PPL-WinTcb | Observation |
-| --- | --- | --- | --- |
-| Windows 10 22H2 Build 19045.2673 | ✔ | ✔ | N/A |
-| Windows 11 22H2 Build 22621.1344 | ⚠ | ❌ | Frequent service crash + Fake cached signature exploit does not seem to work. |
-| Windows Server 2019 Version 1809 Build 17763.4010 | ✔ | ✔ | N/A |
-| Windows Server 2022 Version 21H2 Build 20348.1547 | ✔ | ✔ | N/A |
+| --- | :---: | :---: | --- |
+| __Windows 10__ 22H2 Build 19045.2673 | ✔ | ✔ | N/A |
+| __Windows 11__ 22H2 Build 22621.1344 | ⚠ | ❌ | Frequent service crash + Fake cached signature exploit does not seem to work. |
+| __Windows Server 2019__ Version 1809 Build 17763.4010 | ✔ | ✔ | N/A |
+| __Windows Server 2022__ Version 21H2 Build 20348.1547 | ✔ | ✔ | N/A |
 
-## Known issues ⚠
+## 🚧 Known issues
 
 You get the following error because the exploit __timed out__ while trying to create a remote `TaskHandler` COM object. This is usually the sign that the target service `WaaSMedicSvc` crashed. This can be confirmed with the next message: `[!] Service WaaSMedicSvc is no longer running`. __You should try to run the tool again.__
 
@@ -127,7 +127,7 @@ C:\Windows\System32>C:\Temp\PPLmedic.exe dump 1234 C:\Temp\1234.dmp -p
 [...]
 ```
 
-## Build instructions 🏗
+## 🏗 Build instructions
 
 This Visual Studio Solution comprises two projects (the executable and a payload DLL) that need to be compiled in a specific order. Everything is pre-configured, so you just have to follow these simple instructions. The compiled payload DLL is automatically embedded into the final executable.
 
@@ -135,7 +135,7 @@ This Visual Studio Solution comprises two projects (the executable and a payload
 2. Select `Release / x64` (`x86` is not supported!).
 3. `Build > Build Solution`.
 
-## Credits
+## 🎓 Credits
 
 - [@tiraniddo](https://infosec.exchange/@tiraniddo) - Injecting Code into Windows Protected Processes using COM - Part 1  
 [https://googleprojectzero.blogspot.com/2018/10/injecting-code-into-windows-protected.html](https://googleprojectzero.blogspot.com/2018/10/injecting-code-into-windows-protected.html)
