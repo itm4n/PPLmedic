@@ -8,7 +8,7 @@ This tool implements a **Userland** exploit chain for injecting arbitrary code i
 
 To learn more about this tool, you should read its companion blog post here:
 
-- [Bypassing PPL in Userland (again)](https://blog.scrt.ch/2023/03/14/bypassing-ppl-in-userland-again/)
+- [Bypassing PPL in Userland (again)](https://blog.scrt.ch/2023/03/17/bypassing-ppl-in-userland-again/)
 
 ## 💣 Disclaimer
 
